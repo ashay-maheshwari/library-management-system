@@ -1,3 +1,4 @@
+# testing CodeQL and Autofix
 # Library Management System
 A simple flask app to manage users along with mysql service
 
