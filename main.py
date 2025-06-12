@@ -1,6 +1,7 @@
 from flask import Flask, request, render_template_string
 import sqlite3
 import os
+import subprocess
 import pickle
 
 app = Flask(__name__)
@@ -39,8 +40,16 @@ def greet():
 @app.route("/ping")
 def ping():
     host = request.args.get("host", "")
-    os.system(f"ping -c 1 {host}")  # Dangerous
-    return f"Pinged {host}"
+    # Allowlist of valid hosts
+    ALLOWED_HOSTS = {"127.0.0.1", "localhost", "example.com"}
+    if host not in ALLOWED_HOSTS:
+        return "Invalid host", 400
+    # Use subprocess.run for safer command execution
+    result = subprocess.run(["ping", "-c", "1", host], capture_output=True, text=True)
+    if result.returncode == 0:
+        return f"Pinged {host}: {result.stdout}"
+    else:
+        return f"Failed to ping {host}: {result.stderr}", 500
 
 # 4. Insecure deserialization
 @app.route("/load_pickle", methods=["POST"])
