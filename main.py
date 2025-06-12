@@ -1,7 +1,7 @@
 from flask import Flask, request, render_template_string
 import sqlite3
 import os
-import pickle
+import json
 
 
 app = Flask(__name__)
@@ -47,7 +47,7 @@ def ping():
 @app.route("/load_pickle", methods=["POST"])
 def load_pickle():
     data = request.data
-    obj = pickle.loads(data)  # Insecure deserialization
+    obj = json.loads(data)  # Secure deserialization
     return f"Loaded object: {obj}"
 
 # 5. Information leakage (debug mode)
