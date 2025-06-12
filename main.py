@@ -3,6 +3,7 @@ import sqlite3
 import os
 import pickle
 
+
 app = Flask(__name__)
 
 # Hardcoded secret (Bad practice)
